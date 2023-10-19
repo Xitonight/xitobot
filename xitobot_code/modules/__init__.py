@@ -1,4 +1,4 @@
-from xitobot import LOAD, NO_LOAD, LOGGER
+from xitobot_code import LOAD, NO_LOAD, LOGGER
 
 def __list_all_modules():
     from os.path import dirname, basename, isfile

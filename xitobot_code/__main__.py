@@ -1,7 +1,7 @@
 import importlib
-from xitobot import LOGGER
-from xitobot.modules import ALL_MODULES
-from xitobot.modules.stupid_modules import STUPID_MODULES
+from xitobot_code import LOGGER
+from xitobot_code.modules import ALL_MODULES
+from xitobot_code.modules.stupid_modules import STUPID_MODULES
 from . import application
 import os
 from telegram import Update
@@ -12,10 +12,10 @@ from telegram.ext import (  ContextTypes,
 )
 
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module("xitobot.modules." + module_name)
+    imported_module = importlib.import_module("xitobot_code.modules." + module_name)
 
 for module_name in STUPID_MODULES:
-    imported_stupid_module = importlib.import_module("xitobot.modules.stupid_modules." + module_name)
+    imported_stupid_module = importlib.import_module("xitobot_code.modules.stupid_modules." + module_name)
 
 async def check(update: Update, context: ContextTypes.DEFAULT_TYPE):
     pid = os.getpid()
@@ -41,15 +41,13 @@ async def unknown(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     start_handler = CommandHandler('start', start)
-    application.add_handler(start_handler)
-
     check_handler = CommandHandler('check', check)
-    application.add_handler(check_handler)
-
     get_id_handler = CommandHandler('getid', get_id)
-    application.add_handler(get_id_handler)
-
     unknown_commands_handler = MessageHandler(filters.COMMAND & filters.Text("@xitosbot"), unknown)
+
+    application.add_handler(start_handler)
+    application.add_handler(check_handler)
+    application.add_handler(get_id_handler)
     application.add_handler(unknown_commands_handler)
 
     application.run_polling()

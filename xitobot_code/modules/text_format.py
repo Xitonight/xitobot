@@ -12,7 +12,7 @@ from telegram.constants import (
                                     ParseMode,
 )
 from uuid import uuid4
-from xitobot import application
+from xitobot_code import application
 
 async def to_caps(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text_caps = ' '.join(context.args).upper()
