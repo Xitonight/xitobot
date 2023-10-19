@@ -1,0 +1,5 @@
+.vscode
+xitobot/__pycache__/
+xitobot/modules/__pycache__/
+xitobot/modules/stupid_modules/
+xitobot/config.py
