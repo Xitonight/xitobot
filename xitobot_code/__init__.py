@@ -12,6 +12,7 @@ LOGGER = logging.getLogger(__name__)
 TOKEN = Config.TOKEN
 BASE_URL = Config.BASE_URL
 BASE_FILE_URL = Config.BASE_FILE_URL
+DB_URL = Config.DATABASE_URL
 LOAD = Config.LOAD
 NO_LOAD = Config.NO_LOAD
 

@@ -2,4 +2,6 @@
 xitobot_code/__pycache__/
 xitobot_code/modules/__pycache__/
 xitobot_code/modules/stupid_modules/
+xitobot_code/modules/db_modules/__pycache__
+xitobot_code/modules/tool_modules/__pycache__
 xitobot_code/config.py

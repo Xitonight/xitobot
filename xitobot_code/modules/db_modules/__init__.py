@@ -1,7 +1,7 @@
-import pymongo as db
+import pymongo as mongo
+from ... import DB_URL, LOGGER
 
-CLIENT = db.MongoClient("mongodb://localhost:27017/")
+CLIENT = mongo.MongoClient(DB_URL)
 DB = CLIENT["xitobot"]
 db_list = CLIENT.list_database_names()
-if "xitobot" in db_list:
-    print("Found 1 or more results for xitobot")
+
