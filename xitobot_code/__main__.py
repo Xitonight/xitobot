@@ -25,29 +25,16 @@ async def check(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def start(update, context):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="eiiiii")
 
-async def get_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.message.reply_to_message:
-        reply = update.message.reply_to_message
-        if reply.text:
-            replied_message_id = reply.message_id
-        elif reply.photo:
-            replied_message_id = reply.photo[-1].file_id
-        await update.message.reply_text(f"ID: {replied_message_id}")
-    else:
-        await update.message.reply_text(f"You must reply to a message to use this command.")
-
 async def unknown(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="Unknown command :(")
 
 def main():
     start_handler = CommandHandler('start', start)
     check_handler = CommandHandler('check', check)
-    get_id_handler = CommandHandler('getid', get_id)
     unknown_commands_handler = MessageHandler(filters.COMMAND & filters.Text("@xitosbot"), unknown)
 
     application.add_handler(start_handler)
     application.add_handler(check_handler)
-    application.add_handler(get_id_handler)
     application.add_handler(unknown_commands_handler)
 
     application.run_polling()
