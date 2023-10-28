@@ -11,16 +11,17 @@ class Types(IntEnum):
     AUDIO = 4
     VOICE = 5
     VIDEO = 6
+    GIF = 7
 
 def get_note_type(note_msg):
     note_name = ""
     note_text = ""
-    description = ""
+    description = "No description\."
     note_type = None
     file_id = None
-    
+
     raw_text = note_msg.text
-    args = raw_text.split(maxsplit=2)
+    args = raw_text.split(maxsplit=3)
     reply = note_msg.reply_to_message
     
     if (len(args) == 1):
@@ -44,22 +45,26 @@ def get_note_type(note_msg):
     elif reply.sticker:
         note_type = Types.STICKER
         file_id = reply.sticker.file_id
+    elif reply.animation:
+        note_type = Types.GIF
+        file_id = reply.document.file_id
+        note_text = reply.caption or ""
     elif reply.document:
         note_type = Types.DOCUMENT
         file_id = reply.document.file_id
-        note_text = reply.caption
+        note_text = reply.caption or ""
     elif reply.photo:
         note_type = Types.PHOTO
         file_id = reply.photo[-1].file_id
-        note_text = reply.caption
+        note_text = reply.caption or ""
     elif reply.audio:
         note_type = Types.AUDIO
         file_id = reply.audio.file_id
-        note_text = reply.caption
+        note_text = reply.caption or ""
     elif reply.video:
         note_type = Types.VIDEO
         file_id = reply.video.file_id
-        note_text = reply.caption
+        note_text = reply.caption or ""
 
     return note_name, note_text, description, note_type, file_id 
 
@@ -73,6 +78,9 @@ async def get_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"ID: {replied_message_id}")
     else:
         await update.message.reply_text(f"You must reply to a message to use this command.")
+
+def get_chat_members(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    pass
 
 get_id_handler = CommandHandler('getid', get_id)
 application.add_handler(get_id_handler)

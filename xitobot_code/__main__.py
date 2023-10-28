@@ -14,6 +14,7 @@ from telegram.ext import (  ContextTypes,
 for module_name in ALL_MODULES:
     imported_module = importlib.import_module("xitobot_code.modules." + module_name)
 
+
 for module_name in STUPID_MODULES:
     imported_stupid_module = importlib.import_module("xitobot_code.modules.stupid_modules." + module_name)
 
