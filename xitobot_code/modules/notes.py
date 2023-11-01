@@ -1,6 +1,6 @@
 import re
 from telegram import Update
-from telegram.ext import CommandHandler, ConversationHandler, StringRegexHandler, ContextTypes, filters
+from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, ContextTypes, filters
 from xitobot_code import application, LOGGER
 from xitobot_code.tools.get_info import get_note_type, Types
 import xitobot_code.database.notes_db as notes_db
@@ -30,7 +30,7 @@ async def save(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if note_exists:
         from xitobot_code.modules.conversations import OVERWRITE_NOTE
         context.user_data["note"] = note
-        await context.bot.send_message(chat_id, f"{note_name} is already saved\.\nOverwrite it? (yes / no)")
+        await context.bot.send_message(chat_id, f"{note_name} is already saved\.\nOverwrite it? \(yes / no\)")
         return OVERWRITE_NOTE
     else:
         notes_db.add_note_to_db(chat_id, chat_surname, note_name, text, description, data_type, file_id)
@@ -49,10 +49,8 @@ async def get(update: Update, context: ContextTypes.DEFAULT_TYPE, hash_note: str
         return
     elif len(args)>1 and "-d" in args:
         note_name = next(arg for arg in args if arg!="-d")
-        await update.effective_message.reply_text(note_name)
     else:
         note_name = args[0]
-
 
     note_exists = notes_db.check_existing_note(note_name, chat_id)
 
@@ -85,7 +83,7 @@ async def get(update: Update, context: ContextTypes.DEFAULT_TYPE, hash_note: str
 
 async def hash_get(update: Update, context: ContextTypes.DEFAULT_TYPE):
     LOGGER.info("Started dehashing")
-    no_hash = update.effective_message[1:]
+    no_hash = update.effective_message.text[1:]
     await get(update, context, no_hash)
 
 async def get_all_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -138,7 +136,7 @@ async def delete_all_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
 #---HANDLERS CREATION
 
 get_handler = CommandHandler("get", get)
-hash_get_handler = StringRegexHandler(r"^#[^\s]+", hash_get)
+hash_get_handler = MessageHandler(filters.Regex(r"^#[^\s]+"), hash_get)
 get_all_notes_handler = CommandHandler("notes", get_all_notes)
 delete_one_note_handler = CommandHandler("clear", delete_one_note)
 delete_all_notes_handler = CommandHandler("clearNotes", delete_all_notes)
