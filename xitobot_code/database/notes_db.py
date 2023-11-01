@@ -45,16 +45,10 @@ def list_all(chat_id):
     return notes_list
 
 def check_existing_note(note_name, chat_id=None, chat_surname=None):
-    if list(NOTES.find({"chat_id":chat_id, "name":note_name})) or list(NOTES.find({"chat_surname":chat_surname, "name":note_name})):
-        return True
-    
-    return False
+    return list(NOTES.find({"chat_id":chat_id, "name":note_name})) or list(NOTES.find({"chat_surname":chat_surname, "name":note_name}))
 
 def check_any_note(chat_id):
-    if list(NOTES.find({"chat_id":chat_id})):
-        return True
-    
-    return False
+    return list(NOTES.find({"chat_id":chat_id}))
 
 #---NOTE DELETION FUNCTIONS
 
@@ -83,8 +77,5 @@ def get_inline_surname(chat_id):
     return surname[0]
 
 def check_existing_inline_chat(chat_id):
-    if INLINE_CHATS.find_one({"chat_id":chat_id}):
-        return True
-    
-    return False
+    return INLINE_CHATS.find_one({"chat_id":chat_id})
 

@@ -11,7 +11,6 @@ from telegram import (
     InputTextMessageContent
     )
 from telegram.ext import InlineQueryHandler, ContextTypes
-from telegram.constants import ParseMode
 from xitobot_code import application, LOGGER
 from xitobot_code.tools.get_info import Types
 import xitobot_code.database.notes_db as notes_db
@@ -24,10 +23,10 @@ async def set_inline_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = context.args
     
     if len(args)>1:
-        await update.effective_message.reply_text("The surname for the chat must only contain 1 word.")
+        await update.effective_message.reply_text("The surname for the chat must only contain 1 word\.")
         return
     elif not args:
-        await update.effective_message.reply_text("Please insert a valid surname for the chat.")
+        await update.effective_message.reply_text("Please insert a valid surname for the chat\.")
         return
     
     surname = args[0]
@@ -36,13 +35,13 @@ async def set_inline_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
         from xitobot_code.modules.conversations import OVERWRITE_CHAT_SURNAME
         context.user_data["chat_new_surname"] = surname
         await update.effective_message.reply_text(
-            f"{update.effective_chat.effective_name} is already registered as {notes_db.get_inline_surname(chat_id)}.\nWould you like to update the surname? (yes / no)"
+            f"{update.effective_chat.effective_name} is already registered as {notes_db.get_inline_surname(chat_id)}\.\nWould you like to update the surname? \(yes / no\)"
             )
         return OVERWRITE_CHAT_SURNAME
 
     notes_db.add_inline_chat(chat_id, surname)
     await update.effective_message.reply_text(
-        f"{update.effective_chat.effective_name} notes will be accessible with inline commands under the name of {surname}"
+        f"{update.effective_chat.effective_name} notes will be accessible with inline commands under the name of {surname}\."
         )
     
 async def inline_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -78,7 +77,7 @@ async def inline_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
             InlineQueryResultArticle(
                 id=str(uuid4()),
                 title=note_name,
-                input_message_content=InputTextMessageContent(text, parse_mode=ParseMode.MARKDOWN_V2)
+                input_message_content=InputTextMessageContent(text)
             )
         )
     elif data_type == Types.STICKER:
@@ -94,8 +93,7 @@ async def inline_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 id=str(uuid4()),
                 document_file_id=file_id,
                 title=note_name,
-                caption=text,
-                parse_mode=ParseMode.MARKDOWN_V2
+                caption=text
             )
         )    
     elif data_type == Types.PHOTO:
@@ -104,8 +102,7 @@ async def inline_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 id=str(uuid4()),
                 photo_file_id=file_id,
                 title=note_name,
-                caption=text,
-                parse_mode=ParseMode.MARKDOWN_V2
+                caption=text
             )
         )
     elif data_type == Types.AUDIO:
@@ -113,8 +110,7 @@ async def inline_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
             InlineQueryResultCachedAudio(
                 id=str(uuid4()),
                 audio_file_id=file_id,
-                caption=text,
-                parse_mode=ParseMode.MARKDOWN_V2
+                caption=text
             )
         )
     elif data_type == Types.VOICE:
@@ -123,8 +119,7 @@ async def inline_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 id=str(uuid4()),
                 voice_file_id=file_id,
                 title=note_name,
-                caption=text,
-                parse_mode=ParseMode.MARKDOWN_V2
+                caption=text
             )
         )
     elif data_type == Types.VIDEO:
@@ -133,8 +128,7 @@ async def inline_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 id=str(uuid4()),
                 video_file_id=file_id,
                 title=note_name,
-                caption=text,
-                parse_mode=ParseMode.MARKDOWN_V2
+                caption=text
             )
         )
     elif data_type == Types.GIF:
@@ -143,8 +137,7 @@ async def inline_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 id=str(uuid4()),
                 gif_file_id=file_id,
                 title=note_name,
-                caption=text,
-                parse_mode=ParseMode.MARKDOWN_V2
+                caption=text
             )
     )
         

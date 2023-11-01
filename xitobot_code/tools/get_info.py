@@ -1,7 +1,7 @@
 from enum import IntEnum
 from telegram import Update
 from telegram.ext import CommandHandler, ContextTypes
-from xitobot_code import application
+from xitobot_code import application, LOGGER
 
 class Types(IntEnum):
     TEXT = 0
@@ -21,24 +21,24 @@ def get_note_type(note_msg):
     file_id = None
 
     raw_text = note_msg.text
-    args = raw_text.split(maxsplit=3)
+    args = raw_text.split(maxsplit=2)[1:]
     reply = note_msg.reply_to_message
-    
-    if (len(args) == 1):
+
+    if (len(args) == 0):
         return note_name, note_text, description, note_type, file_id
 
-    note_name = args[1]
+    note_name = args[0]
         
-    if not reply and len(args) == 2:
+    if not reply and len(args) == 1:
         return note_name, note_text, description, note_type, file_id
     
-    if not reply and len(args) == 3:
+    if not reply and len(args) == 2:
         note_type = Types.TEXT
-        note_text = args[2]
+        note_text = args[1]
         return note_name, note_text, description, note_type, file_id
 
-    if reply and len(args)==3:
-        description = args[2]
+    if reply and len(args) == 2:
+        description = args[1]
     if reply.text:
         note_type = Types.TEXT
         note_text = reply.text

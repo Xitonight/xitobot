@@ -4,6 +4,7 @@ from xitobot_code.modules import ALL_MODULES
 from xitobot_code.modules.stupid_modules import STUPID_MODULES
 from . import application
 import os
+from subprocess import call
 from telegram import Update
 from telegram.ext import (  ContextTypes, 
                             filters, 
@@ -14,7 +15,6 @@ from telegram.ext import (  ContextTypes,
 for module_name in ALL_MODULES:
     imported_module = importlib.import_module("xitobot_code.modules." + module_name)
 
-
 for module_name in STUPID_MODULES:
     imported_stupid_module = importlib.import_module("xitobot_code.modules.stupid_modules." + module_name)
 
@@ -23,7 +23,7 @@ async def check(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"{update.message.text} The base url is: {context.bot.base_url}"
                                     f"\nwith {pid}")
 
-async def start(update, context):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="eiiiii")
 
 async def unknown(update: Update, context: ContextTypes.DEFAULT_TYPE):
