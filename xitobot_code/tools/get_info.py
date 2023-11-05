@@ -1,5 +1,5 @@
 from enum import IntEnum
-from telegram import Update
+from telegram import Update, Message
 from telegram.ext import CommandHandler, ContextTypes
 from xitobot_code import application, LOGGER
 
@@ -13,7 +13,7 @@ class Types(IntEnum):
     VIDEO = 6
     GIF = 7
 
-def get_note_type(note_msg):
+def get_note_type(note_msg: Message):
     note_name = ""
     note_text = ""
     description = "No description\."
@@ -41,30 +41,30 @@ def get_note_type(note_msg):
         description = args[1]
     if reply.text:
         note_type = Types.TEXT
-        note_text = reply.text
+        note_text = reply.text_markdown_v2
     elif reply.sticker:
         note_type = Types.STICKER
         file_id = reply.sticker.file_id
     elif reply.animation:
         note_type = Types.GIF
         file_id = reply.document.file_id
-        note_text = reply.caption or ""
+        note_text = reply.caption_markdown_v2 or ""
     elif reply.document:
         note_type = Types.DOCUMENT
         file_id = reply.document.file_id
-        note_text = reply.caption or ""
+        note_text = reply.caption_markdown_v2 or ""
     elif reply.photo:
         note_type = Types.PHOTO
         file_id = reply.photo[-1].file_id
-        note_text = reply.caption or ""
+        note_text = reply.caption_markdown_v2 or ""
     elif reply.audio:
         note_type = Types.AUDIO
         file_id = reply.audio.file_id
-        note_text = reply.caption or ""
+        note_text = reply.caption_markdown_v2 or ""
     elif reply.video:
         note_type = Types.VIDEO
         file_id = reply.video.file_id
-        note_text = reply.caption or ""
+        note_text = reply.caption_markdown_v2 or ""
 
     return note_name, note_text, description, note_type, file_id 
 

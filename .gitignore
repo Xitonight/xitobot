@@ -5,4 +5,5 @@ xitobot_code/modules/stupid_modules/
 xitobot_code/database/__pycache__
 xitobot_code/tools/__pycache__
 xitobot_code/config.py
+**/*.binlog
 ideas.txt

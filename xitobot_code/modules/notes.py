@@ -1,4 +1,3 @@
-import re
 from telegram import Update
 from telegram.ext import CommandHandler, ConversationHandler, MessageHandler, ContextTypes, filters
 from xitobot_code import application, LOGGER
@@ -62,8 +61,8 @@ async def get(update: Update, context: ContextTypes.DEFAULT_TYPE, hash_note: str
     text, description, data_type, file_id = note_values
 
     if "-d" in args:
-        text+= f"\n\n*Description:*\n{description}"
-
+        text = text.join(f"\n\n*Description:*\n{description}")
+    
     if data_type == Types.TEXT:
         await context.bot.send_message(chat_id, text)
     elif data_type == Types.STICKER:
@@ -82,7 +81,6 @@ async def get(update: Update, context: ContextTypes.DEFAULT_TYPE, hash_note: str
         await context.bot.send_video(chat_id, file_id, caption=text)
 
 async def hash_get(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    LOGGER.info("Started dehashing")
     no_hash = update.effective_message.text[1:]
     await get(update, context, no_hash)
 
@@ -93,7 +91,7 @@ async def get_all_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
     notes_in_chat = notes_db.check_any_note(chat_id)
     
     if not notes_in_chat:
-        await update.effective_message.reply_text(f"There are no notes to show in {chat_name}\.")
+        await update.effective_message.reply_text(f"There are no notes to show in {chat_name}.")
         return
     
     notes_list = notes_db.list_all(chat_id)
@@ -106,18 +104,18 @@ async def delete_one_note(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
     
     if len(context.args)>1:
-        await update.effective_message.reply_text("Please, only provide the note's name\.")
+        await update.effective_message.reply_text("Please, only provide the note's name.")
         return
     
     note_name = context.args[0]
     note_exists = notes_db.check_existing_note(note_name, chat_id)
     
     if not note_exists:
-        await update.effective_message.reply_text("There's no note with that name\.")
+        await update.effective_message.reply_text("There's no note with that name.")
         return
     
     notes_db.clear_note(chat_id, note_name)
-    await update.effective_message.reply_text(f"Deleted {note_name}\.")
+    await update.effective_message.reply_text(f"Deleted {note_name}.")
 
 
 async def delete_all_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -127,11 +125,11 @@ async def delete_all_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
     notes_in_chat = notes_db.check_any_note(chat_id)
 
     if not notes_in_chat:
-        await update.effective_message.reply_text(f"There aren't any notes to delete in {chat_name}\.")
+        await update.effective_message.reply_text(f"There aren't any notes to delete in {chat_name}.")
         return
     
     deleted = notes_db.clear_all_notes(chat_id)
-    await update.effective_message.reply_text(f"Deleted {deleted} notes from {chat_name}\.")
+    await update.effective_message.reply_text(f"Deleted {deleted} notes from {chat_name}.")
 
 #---HANDLERS CREATION
 
